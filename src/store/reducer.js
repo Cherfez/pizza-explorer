@@ -1,6 +1,7 @@
 const initialState = {
   user: {
-    name: "Helva"
+    name: "Helva",
+    favorites: []
   },
   pizzas: [
     {
@@ -8,21 +9,24 @@ const initialState = {
       name: "Pizza Margherita",
       description:
         "The typical Neapolitan pizza, made with San Marzano tomatoes, mozzarella cheese, fresh basil, salt and extra-virgin olive oil.",
-      bought: 5
+      bought: 5,
+      ingredients: ["tomatoes", "mozzarella", "basil", "oil"]
     },
     {
       id: 67283,
       name: "Pizza Napoletana",
       description:
         "Neapolitan pizza also known as Naples-style pizza, is a style of pizza made with tomatoes and mozzarella cheese.",
-      bought: 2
+      bought: 2,
+      ingredients: ["tomatoes", "mozzarella", "oil"]
     },
     {
       id: 357311,
       name: "Pizza Bianca",
       description:
         "White pizza, which omits tomato sauce from the equation, often substituting it with pesto or sour cream.",
-      bought: 10
+      bought: 10,
+      ingredients: ["ricotta", "mozzarella", "garlic"]
     }
   ]
 };
@@ -42,6 +46,32 @@ export default function reducer(state = initialState, action) {
             bought: 0
           }
         ]
+      };
+    }
+    case "TOGGLE_FAVORITE_PIZZA": {
+      //console.log("FAVS", state.user.favorites);
+      //console.log("ADDED OR TAKEN AWAY", action.payload);
+
+      let newFavorites;
+      // pizza in -> take out
+      // pizza out -> take in
+
+      if (state.user.favorites.includes(action.payload)) {
+        //console.log("TAKE IT OUT");
+        newFavorites = state.user.favorites.filter(
+          favorite => favorite !== action.payload
+        );
+      } else {
+        //console.log("PUT ME IN!");
+        newFavorites = [...state.user.favorites, action.payload];
+      }
+
+      return {
+        ...state,
+        user: {
+          ...state.user,
+          favorites: newFavorites
+        }
       };
     }
     default: {
